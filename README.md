@@ -1,6 +1,6 @@
 # Llama.cpp Run Menu
 
-## Links:
+> **Links:**  
 > [llama.cpp](https://github.com/ggml-org/llama.cpp)  
 > [Hugging Face](https://huggingface.co/)  
 > [NVIDIA - Void Docs BTW](https://docs.voidlinux.org/config/graphical-session/graphics-drivers/nvidia.html)  
