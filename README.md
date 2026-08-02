@@ -1,4 +1,4 @@
-# Llama_cpp_Run_Menu
+# Llama.cpp Run Menu
 
 ## Links:
 > [llama.cpp](https://github.com/ggml-org/llama.cpp)  
