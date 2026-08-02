@@ -1,0 +1,79 @@
+#!/bin/bash
+
+shopt -s extglob
+
+#Color variables:
+# https://gist.github.com/JBlond/2fea43a3049b38287e5e9cefc87b2124
+RED='\e[31m'
+GREEN='\e[32m'
+YELLOW='\e[33m'
+BLUE='\e[34m'
+WHITE='\e[37m'
+PURPLE='\e[35m'
+BOLD='\e[1m'
+RESET='\e[0m'
+
+# Llama-cli Commands:
+#llama-cli --cache-list
+#llama-cli -hf <HF_MODEL_NAME>
+
+chosenLLM=''
+runSel=''
+
+readarray -t llmArr < <(echo "$(llama-cli --cache-list | grep '[0-9]\.' | sed 's/^\s*[0-9]\+\.\s//g')")
+
+llm_run() {
+
+	clear
+
+	if [[ ! -z $llmArr ]]; then
+	        
+		printf "\n"
+		printf "${BLUE}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${RESET}\n"
+		printf "${BLUE}::${RESET} ${WHITE}Downloaded Models: ${RESET}\n"
+		printf "${BLUE}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${RESET}\n"
+		printf "\n"
+		
+		while [[ -z $chosenLLM ]]; do
+	                for ind in "${!llmArr[@]}"; do
+	                        (( runInd = ind + 1 ))
+				printf "${BLUE}:: ${runInd})${RESET} ${WHITE}${llmArr[$ind]}${RESET}\n"
+	
+	                        if [[ -z $runPat ]]; then
+	                                runPat="${runInd}"
+	                        else
+	                                runPat="${runPat}|${runInd}"
+	                        fi
+	
+	                done
+	
+	                if (( "${#llmArr[@]}" > 1 )); then
+	                        read -p "::: Enter your choice [1-${runInd}]: " runSel
+	                else
+	                        read -p "::: Enter your choice [1]: " runSel
+	                fi
+	
+	                case $runSel in
+	                        @($runPat))
+	                                (( arrInd = runSel - 1 ))
+	                                read -ra runPart <<< "${llmArr[$arrInd]}"
+	                                chosenLLM="${runPart[0]}"
+					;;
+	                        *)
+	                                printf "${RED}>>> NOPE:${RESET} ${WHITE}Please choose a model to run.${RESET}\n"
+	                                choseLLM=''
+					;;
+	                esac
+	        done
+	else
+	        printf "${RED}>>> ERROR:${RESET} ${WHITE}There are no locally cached models.${RESET}\n"
+	        exit 1
+	fi
+	
+	if [[ ! -z $chosenLLM ]]; then
+	        llama-cli -hf $chosenLLM
+	fi
+}
+
+
+llm_run
