@@ -1,0 +1,50 @@
+#!/bin/bash
+
+#Color variables:
+# https://gist.github.com/JBlond/2fea43a3049b38287e5e9cefc87b2124
+RED='\e[31m'
+GREEN='\e[32m'
+YELLOW='\e[33m'
+BLUE='\e[34m'
+WHITE='\e[37m'
+PURPLE='\e[35m'
+BOLD='\e[1m'
+RESET='\e[0m'
+
+printf "${BLUE}:::::::::::::::::::::::::::::::::::::::::::${RESET}\n"
+printf "${BLUE}::${RESET} ${WHITE}llama.cpp Upgrade${RESET}\n"
+printf "${BLUE}:::::::::::::::::::::::::::::::::::::::::::${RESET}\n"
+printf "\n"
+
+# Commands for reference:
+# cmake . -DGGML_CUDA=1 -DCMAKE_CUDA_ARCHITECTURES=86
+# make -j$(nproc)
+
+llamaCppPath="$(find /home/$USER -type d -name "llama.cpp")"
+llamaCppBuild="${llamaCppPath}/build"
+
+
+if [[ -n "$llamaCppPath" ]]; then
+	(	
+		printf "${BLUE}:: Running in subshell PID:${RESET} ${WHITE}${BASHPID}${RESET}\n"
+		cd $llamaCppPath
+	
+		git fetch origin
+		gitPriBranch="$(git rev-parse --abbrev-ref origin/HEAD | sed 's|origin/||')"
+		git pull origin $gitPriBranch
+		latestCommit="$(git log -1 --oneline)"
+		printf "${BLUE}:: Building new version of llama.cpp at:${RESET} ${WHITE}${llamaCppPath}${RESET}\n"
+		printf "${BLUE}::${RESET} ${WHITE}${latestCommit}${RESET}\n"
+		printf "\n"
+	
+		rm -rf $llamaCppBuild
+		mkdir $llamaCppBuild
+		cd $llamaCppBuild
+		cmake .. -DGGML_CUDA=1 -DCMAKE_CUDA_ARCHITECTURES=86
+		cmake --build . --config Release -j$(nproc)
+	)
+else 
+	printf "${RED}>>> ERROR:${RESET} ${WHITE}llama.cpp repo is missing. Please clone from: https://github.com/ggml-org/llama.cpp${RESET}\n"
+	exit 1
+fi
+
