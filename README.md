@@ -7,7 +7,7 @@
 
 ## Quickstart:
 
-**IMPORTANT:** This assumes that you have llama.cpp installed and running on your machine as well as a Hugging Face account with pre-downloaded GGUF models. Distro is `Void`, yet these scripts **should** be fairly agnostic.
+**IMPORTANT:** This assumes that you have llama.cpp installed and running on your machine as well as a Hugging Face account with pre-downloaded GGUF models. 
 
 ### Run the `llama.cpp-server` script:  
 
