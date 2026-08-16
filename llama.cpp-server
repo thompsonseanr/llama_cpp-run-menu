@@ -13,9 +13,26 @@ PURPLE='\e[35m'
 BOLD='\e[1m'
 RESET='\e[0m'
 
-# Llama-cli Commands:
-#llama-cli --cache-list
-#llama-cli -hf <HF_MODEL_NAME>
+# Llama-cli Commands for Reference:
+# llama-cli --cache-list
+# llama-cli -hf <HF_MODEL_NAME>
+
+##################################################################
+# To-Do:
+#
+# 1) Local MCP for personal notes with json config:
+# Command:
+#	llama-server \
+#		-hf "$chosenLLM" \
+#		--mcp-servers-config "/home/<USER>/mcp/<MCP_CONFIG>.json" \
+#		--ui-mcp-proxy \
+#		--jinja \
+#		-c 16384 \
+#		--port 8080
+#
+# 2) Local MCP server (node/lua(?)) with containerized deployment
+#
+##################################################################
 
 chosenLLM=''
 runSel=''
@@ -71,7 +88,11 @@ llm_run() {
 	fi
 	
 	if [[ ! -z $chosenLLM ]]; then
-	        llama-cli -hf $chosenLLM
+		llama-server \
+			-hf "$chosenLLM" \
+			--jinja \
+			-c 16384 \
+			--port 8080
 	fi
 }
 
