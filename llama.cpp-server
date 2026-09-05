@@ -92,7 +92,9 @@ llm_run() {
 			-hf "$chosenLLM" \
 			--jinja \
 			-c 16384 \
-			--port 8080
+			--port 8080 & 
+		
+		xdg-open "http://127.0.0.1:8080" & wait
 	fi
 }
 
