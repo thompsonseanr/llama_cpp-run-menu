@@ -29,7 +29,7 @@ llama.cpp-server
 
 3) A browser should now start with the llama.cpp web UI.  
 
-If a browser fails to open, please go to: [http://127.0.0.1:8080](http://127.0.0.1:8080)  
+If a browser fails to open, please go to: [http://127.0.0.1:9931](http://127.0.0.1:9931)  
 
 
 ### Run the `llama.cpp-cli` script  
