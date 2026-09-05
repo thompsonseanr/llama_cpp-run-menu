@@ -26,15 +26,15 @@ llamaCppBuild="${llamaCppPath}/build"
 
 if [[ -n "$llamaCppPath" ]]; then
 	(	
-		printf "${BLUE}:: Running in subshell PID:${RESET} ${WHITE}${BASHPID}${RESET}\n"
+		printf "${BLUE}:: Running in subshell PID:${RESET} ${WHITE}${BASHPID}${RESET}\n" >&2
 		cd $llamaCppPath
 	
-		git fetch origin
+		git fetch -q origin
 		gitPriBranch="$(git rev-parse --abbrev-ref origin/HEAD | sed 's|origin/||')"
-		git pull origin $gitPriBranch
+		git pull -q origin $gitPriBranch
 		latestCommit="$(git log -1 --oneline)"
-		printf "${BLUE}:: Building new version of llama.cpp at:${RESET} ${WHITE}${llamaCppPath}${RESET}\n"
-		printf "${BLUE}::${RESET} ${WHITE}${latestCommit}${RESET}\n"
+		printf "${BLUE}:: Building new version of llama.cpp at:${RESET} ${WHITE}${llamaCppPath}${RESET}\n" >&2
+		printf "${BLUE}::${RESET} ${WHITE}${latestCommit}${RESET}\n" >&2
 		printf "\n"
 	
 		rm -rf $llamaCppBuild
@@ -44,7 +44,7 @@ if [[ -n "$llamaCppPath" ]]; then
 		cmake --build . --config Release -j$(nproc)
 	)
 else 
-	printf "${RED}>>> ERROR:${RESET} ${WHITE}llama.cpp repo is missing. Please clone from: https://github.com/ggml-org/llama.cpp${RESET}\n"
+	printf "${RED}>>> ERROR:${RESET} ${WHITE}llama.cpp repo is missing. Please clone from: https://github.com/ggml-org/llama.cpp${RESET}\n" >&2
 	exit 1
 fi
 
